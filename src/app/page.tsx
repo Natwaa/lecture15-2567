@@ -3,7 +3,7 @@
 import TermsAndCondsModal from "@components/TermsAndCondsModal";
 import { useDisclosure } from "@mantine/hooks";
 import { runningPlans } from "@lib/runningPlans";
-import {
+import { 
   Anchor,
   Button,
   Checkbox,
@@ -17,6 +17,20 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
+import { useForm, zodResolver } from "@mantine/form";
+import { z } from "zod";
+import errorMap from "zod/locales/en.js";
+
+const schema = z.object({
+  firstName: z.string().min(3,{message:'First Name must have at least 3 characters'}),
+  lastName: z.string().min(3,{message:'Last Name must have at least 3 characters'}),
+  email: z.string().email({message:'Invalid email address'}),
+  plan: z.enum(['funrun','mini','haif','full'],{message:'Please salect a plan'}),
+  gender: z.enum(["male", "female"],{message: 'Please salect a gender'}),
+  acceptTermAndConds: z.literal(true,{
+    errorMap: () => ({message:'First Name must have at least 3 characters'}),
+  }),
+});
 
 export default function Home() {
   const [opened, { open, close }] = useDisclosure(false);
